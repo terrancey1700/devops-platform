@@ -4,6 +4,17 @@
     name: nginx
     state: present
 
+- name: Deploy custom nginx index page
+  ansible.builtin.copy:
+    content: |
+      <h1>DevOps Platform</h1>
+      <p>Managed by Ansible</p>
+    dest: /usr/share/nginx/html/index.html
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart nginx
+
 - name: Enable and start nginx
   ansible.builtin.service:
     name: nginx
