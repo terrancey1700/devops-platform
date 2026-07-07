@@ -91,6 +91,14 @@ resource "aws_instance" "web" {
   key_name                    = var.key_pair_name
   associate_public_ip_address = true
 
+  user_data = <<-EOF
+              #!/bin/bash
+              dnf update -y
+              dnf install nginx -y
+              systemctl enable nginx
+              systemctl start nginx
+              EOF
+
   tags = {
     Name = "${var.environment}-web-server"
   }
