@@ -5,10 +5,8 @@
     state: present
 
 - name: Deploy custom nginx index page
-  ansible.builtin.copy:
-    content: |
-      <h1>DevOps Platform</h1>
-      <p>Managed by Ansible</p>
+  ansible.builtin.template:
+    src: index.html.j2
     dest: /usr/share/nginx/html/index.html
     owner: root
     group: root
