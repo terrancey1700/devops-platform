@@ -1,0 +1,17 @@
+---
+- name: Install Docker
+  ansible.builtin.dnf:
+    name: docker
+    state: present
+
+- name: Enable and start Docker
+  ansible.builtin.service:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Run Docker hello-world container
+  ansible.builtin.command:
+    cmd: docker run hello-world
+  register: docker_hello_world
+  changed_when: false
