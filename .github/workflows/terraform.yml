@@ -12,8 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     defaults:
-      runs:
-        working-directory: "infra/**"
+      run:
+        working-directory: infra
     
     steps:
       - name: Checkout repo
