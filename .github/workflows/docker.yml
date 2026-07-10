@@ -1,27 +1,25 @@
 name: Docker CI
 
 on:
-    pull_request:
-        branches:
-            - main
-        paths:
-            - "apps/nginx/**"
-            - ".github/workflows/docker.yml"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "apps/nginx/**"
+      - ".github/workflows/docker.yml"
 
 jobs:
-    build:
-        name: Validate nginx image build
-        runs-on: ubuntu-latest
+  build:
+    name: Validate nginx image build
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Check out repository
-              uses: actions/checkout@v4
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
 
-            - name: Build nginx image
-              uses: dockerbuild-push-action@v6
-            with:
-                context: ./apps/nginx
-                push: false
-                tags: devops-platform-nginx:ci 
-
-
+      - name: Build nginx image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/nginx
+          push: false
+          tags: devops-platform-nginx:ci
