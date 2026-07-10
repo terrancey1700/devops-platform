@@ -15,10 +15,10 @@ jobs:
 
         steps:
             - name: Check out repository
-            uses: actions/checkout@v4
+              uses: actions/checkout@v4
 
             - name: Build nginx image
-            uses: dockerbuild-push-action@v6
+              uses: dockerbuild-push-action@v6
             with:
                 context: ./apps/nginx
                 push: false
