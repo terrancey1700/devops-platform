@@ -21,7 +21,7 @@ permissions:
 
 jobs:
   build:
-    name: Build and publish nginx image
+    name: Build and scan nginx image
     runs-on: ubuntu-latest
 
     steps:
@@ -36,11 +36,20 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and optionally push nginx image
+      - name: Build nginx image for security scanning
         uses: docker/build-push-action@v6
         with:
           context: ./apps/nginx
-          push: ${{ github.event_name == 'push' }}
+          push: false
+          load: true
           tags: |
-            ghcr.io/terrancey1700/devops-platform-nginx:latest
             ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
+
+      - name: Scan nginx image for critical vulnerabilities
+      uses: aquasecurity/trivy-action@v0.36.0
+      with:
+        image-ref: ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
+        format: table
+        severity: critical
+        ignore-unfixed: true
+        exit-code: "1"
