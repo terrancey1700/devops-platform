@@ -46,10 +46,11 @@ jobs:
             ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
 
       - name: Scan nginx image for critical vulnerabilities
-      uses: aquasecurity/trivy-action@v0.36.0
-      with:
-        image-ref: ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
-        format: table
-        severity: critical
-        ignore-unfixed: true
-        exit-code: "1"
+        uses: aquasecurity/trivy-action@v0.35.0
+        with:
+          image-ref: ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
+          format: table
+          severity: critical
+          ignore-unfixed: true
+          exit-code: "1"
+            
