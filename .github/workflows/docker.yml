@@ -50,7 +50,7 @@ jobs:
         with:
           image-ref: ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
           format: table
-          severity: critical
+          severity: CRITICAL
           ignore-unfixed: true
           exit-code: "1"
             
