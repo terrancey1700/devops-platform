@@ -1,0 +1,8 @@
+---
+- name: Configure GitHub Actions runner hosts
+  hosts: github_runners
+  become: true
+
+  roles:
+    - common
+    - docker

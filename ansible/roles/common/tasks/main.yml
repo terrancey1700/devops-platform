@@ -1,9 +1,5 @@
 ---
-- name: Install common packages
+- name: Install common runner packages
   ansible.builtin.dnf:
-    name:
-      - git
-      - wget
-      - unzip
-      - vim
+    name: "{{ common_packages }}"
     state: present

@@ -1,0 +1,7 @@
+---
+common_packages:
+  - git
+  - jq
+  - tar
+  - gzip
+  - unzip
