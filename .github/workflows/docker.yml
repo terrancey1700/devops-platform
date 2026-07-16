@@ -18,6 +18,7 @@ on:
 permissions:
   contents: read
   packages: write
+  id-token: write
 
 jobs:
   build:
@@ -28,22 +29,15 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Log in to GitHub Container Registry
-        if: github.event_name == 'push'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build nginx image for security scanning
         uses: docker/build-push-action@v6
         with:
           context: ./apps/nginx
           push: false
           load: true
+          pull: true
           tags: |
-            ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
+            ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}    
 
       - name: Scan nginx image for critical vulnerabilities
         uses: aquasecurity/trivy-action@v0.35.0
@@ -53,4 +47,40 @@ jobs:
           severity: CRITICAL
           ignore-unfixed: true
           exit-code: "1"
-            
+
+      - name: Log in to GitHub Container Registry
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push validated nginx image
+        if: github.event_name == 'push'
+        run: |
+          docker push \
+            ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }}
+
+      
+      - name: Install Cosign
+        if: github.event_name == 'push'
+        uses: sigstore/cosign-installer@v4.1.2
+
+      - name: Capture published image digest
+        if: github.event_name == 'push'
+        id: image
+        run: |
+          DIGEST="$(docker inspect \
+          --format='{{index .RepoDigests 0}}' \
+          ghcr.io/terrancey1700/devops-platform-nginx:sha-${{ github.sha }})"
+
+          echo "reference=${DIGEST}" >> "$GITHUB_OUTPUT"
+          echo "Published image: ${DIGEST}"
+
+      - name: Sign published image with Cosign
+        if: github.event_name == 'push'
+        env:
+          IMAGE_REFERENCE: ${{ steps.image.outputs.reference }}
+        run: |
+          cosign sign --yes "${IMAGE_REFERENCE}"
