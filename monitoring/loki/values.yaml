@@ -1,0 +1,32 @@
+deploymentMode: Monolithic
+
+loki:
+  commonConfig:
+    replication_factor: 1
+
+  useTestSchema: true
+
+  storage:
+    type: filesystem
+
+singleBinary:
+  replicas: 1
+  persistence:
+    enabled: true
+    size: 5Gi
+
+backend:
+  replicas: 0
+
+read:
+  replicas: 0
+
+write:
+  replicas: 0
+
+
+chunksCache:
+  enabled: false
+
+resultsCache:
+  enabled: false

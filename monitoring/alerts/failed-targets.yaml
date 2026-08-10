@@ -1,0 +1,19 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: custom-target-alerts
+  namespace: monitoring
+  labels:
+    release: monitoring
+spec:
+  groups:
+    - name: custom-target.rules
+      rules:
+        - alert: PrometheusTargetDown
+          expr: count(up == 0) > 0
+          for: 1m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Prometheus has failed scrape targets"
+            description: "At least one Prometheus scrape target has been down for 1 minute."
