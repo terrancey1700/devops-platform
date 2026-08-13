@@ -7,6 +7,7 @@ metadata:
     vault.hashicorp.com/agent-inject: "true"
     vault.hashicorp.com/role: "devops-app"
     vault.hashicorp.com/agent-inject-secret-creds.txt: "secret/data/devops-app"
+    vault.hashicorp.com/agent-inject-secret-aws.txt: "aws/creds/devops-readonly"
 spec:
   serviceAccountName: devops-app
   containers:
