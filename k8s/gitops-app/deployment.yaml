@@ -17,6 +17,7 @@ spec:
       labels:
         app: nginx
         version: blue
+        track: production
 
     spec:
       containers:
