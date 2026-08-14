@@ -5,6 +5,7 @@ metadata:
 spec:
   selector:
     app: nginx
+    track: production
   
   ports:
     - port: 80
