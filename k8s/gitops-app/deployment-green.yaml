@@ -31,6 +31,10 @@ spec:
               cpu: 200m
               memory: 128Mi
 
+          volumeMounts:
+            - name: green-page
+              mountPath: /usr/share/nginx/html
+
           ports:
             - containerPort: 80
 
@@ -51,3 +55,8 @@ spec:
             periodSeconds: 5
             timeoutSeconds: 2
             failureThreshold: 3
+
+      volumes:
+        - name: green-page
+          configMap:
+            name: nginx-green-page
